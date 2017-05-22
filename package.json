@@ -1,0 +1,24 @@
+{
+  "name": "@jenkins-cd/react-flow",
+  "version": "1.0.0",
+  "description": "Generic code to create a Flow with react",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jasmine spec/*.js",
+    "jsdoc": "jsdoc -d jsdoc src/*.js JSDOC.md && mkdir -p jsdoc/images && cp images/* jsdoc/images",
+    "prepublish": "babel src --out-dir dist"
+  },
+  "repository": "https://github.com/scherler/blueocean-react-flow",
+  "author": "Thorsten Scherler",
+  "license": "MIT",
+  "dependencies": {
+    "babel-cli": "6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "jsdoc": "^3.4.3"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1"
+  }
+}
