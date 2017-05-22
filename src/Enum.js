@@ -1,7 +1,7 @@
 /**
  * Pseudo-enum.
  *
- * Usage:
+ * @example
  *
  * const Suit = new Enum({
  *     SPADES: 'spades',
@@ -12,20 +12,20 @@
  */
 export class Enum {
 
-    _values = [];
+  _values = [];
 
-    constructor(props) {
-        Object.assign(this, props);
+  constructor(props) {
+    Object.assign(this, props);
 
-        for (const value in props) {
-            if (props.hasOwnProperty(value)) {
-                this._values.push(props[value]);
-            }
-        }
+    for (const value in props) {
+      if (props.hasOwnProperty(value)) {
+        this._values.push(props[value]);
+      }
     }
+  }
 
-    values() {
-        return this._values.slice();
-    }
+  values() {
+    return this._values.slice();
+  }
 
 }
