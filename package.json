@@ -1,6 +1,6 @@
 {
   "name": "@jenkins-cd/react-flow",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "Generic code to create a Flow with react",
   "main": "dist/index.js",
   "scripts": {

@@ -1,21 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as logging from '@jenkins-cd/logging';
-import { observer } from 'mobx-react';
 import MultiStepFlow from './MultiStepFlow';
 import randomId from './randomId';
 
 const logger = logging.logger('react-flow.Renderer');
 
-@observer
 export class StepsRenderer extends Component {
-    constructor(props) {
-        super(props);
-        this.flowManager = props.flowManager;
-    }
     render() {
-        const { steps = [], placeholders = [], activeIndex = 0 } = this.flowManager;
-        logger.warn('steps', steps);
+        const { steps = [], placeholders = [], activeIndex = 0 } = this.props;
 
         if  (steps.length===0 && placeholders.length===0) {
             logger.error('no Steps');
@@ -47,7 +40,9 @@ export class StepsRenderer extends Component {
     }
 }
 StepsRenderer.propTypes = {
-    flowManager: PropTypes.object.required,
+    activeIndex: PropTypes.number,
+    steps: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    placeholders:  PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };
 
 export default StepsRenderer;
