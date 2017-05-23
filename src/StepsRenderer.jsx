@@ -1,11 +1,21 @@
-import React, { Component, PropTypes } from 'react';
-import { logging, Utils } from '@jenkins-cd/blueocean-core-js';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import * as logging from '@jenkins-cd/logging';
+import { observer } from 'mobx-react';
+import MultiStepFlow from './MultiStepFlow';
+import randomId from './randomId';
 
 const logger = logging.logger('react-flow.Renderer');
-// , i18nTranslator, loadingIndicator
+
+@observer
 export class StepsRenderer extends Component {
+    constructor(props) {
+        super(props);
+        this.flowManager = props.flowManager;
+    }
     render() {
-        const { steps = [], placeholders = [], activeIndex = 0 } = this.props;
+        const { steps = [], placeholders = [], activeIndex = 0 } = this.flowManager;
+        logger.warn('steps', steps);
 
         if  (steps.length===0 && placeholders.length===0) {
             logger.error('no Steps');
@@ -14,7 +24,7 @@ export class StepsRenderer extends Component {
 
         // helper function to create a React element from a step.
         const createReactElement = step => React.createElement(step.stepElement, {
-            ...step.props || {}, ...props, key: Utils.randomId(),
+            ...step.props || {}, ...this.props, key: randomId(),
         });
         // create Step elements from the steps
         const flowSteps = steps.map(createReactElement);
@@ -26,15 +36,18 @@ export class StepsRenderer extends Component {
             placeholderSteps,
         );
         return (<MultiStepFlow
-            className="creation-steps"
-            activeIndex={activeIndex}>
+            {...{
+                className: 'creation-steps',
+                activeIndex,
+                ...this.props,
+            }}
+        >
             { allSteps }
         </MultiStepFlow>);
     }
 }
 StepsRenderer.propTypes = {
-    steps: PropTypes.array,
-    placeholders: PropTypes.array,
+    flowManager: PropTypes.object.required,
 };
 
 export default StepsRenderer;
