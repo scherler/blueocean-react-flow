@@ -1,48 +1,38 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { observer } from 'mobx-react';
 import * as logging from '@jenkins-cd/logging';
 import MultiStepFlow from './MultiStepFlow';
-import randomId from './randomId';
+import FlowStep from './FlowStep';
 
 const logger = logging.logger('react-flow.Renderer');
 
+@observer
 export class StepsRenderer extends Component {
     render() {
-        const { steps = [], placeholders = [], activeIndex = 0 } = this.props;
-
-        if  (steps.length===0 && placeholders.length===0) {
-            logger.error('no Steps');
-            return null;
-        }
-
-        // helper function to create a React element from a step.
-        const createReactElement = step => React.createElement(step.stepElement, {
-            ...step.props || {}, ...this.props, key: randomId(),
-        });
         // create Step elements from the steps
-        const flowSteps = steps.map(createReactElement);
+        const steps = this.props.flowManager.steps.map(step => step.stepElement);
         // create Step elements for each "placeholder" text and
-        const placeholderSteps = placeholders.map(createReactElement);
+        const placeholderSteps = this.props.flowManager.placeholders.map(text => (
+            <FlowStep title={text} />
+        ));
         // then combine with the actual rendered steps
         const allSteps = [].concat(
-            flowSteps,
+            steps,
             placeholderSteps,
         );
+
         return (<MultiStepFlow
-            {...{
-                className: 'creation-steps',
-                activeIndex,
-                ...this.props,
-            }}
+            className="creation-steps" activeIndex={this.props.flowManager.activeIndex}
         >
-            { allSteps }
-        </MultiStepFlow>);
+            {React.Children.map(allSteps, child => (
+                    React.cloneElement(child, this.props)
+                ))}
+            </MultiStepFlow>);
     }
 }
 StepsRenderer.propTypes = {
-    activeIndex: PropTypes.number,
-    steps: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-    placeholders:  PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    flowManager: PropTypes.func,
 };
 
 export default StepsRenderer;

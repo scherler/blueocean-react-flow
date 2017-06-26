@@ -1,8 +1,10 @@
-import { action, computed, observable } from 'mobx';
-import * as logging from '@jenkins-cd/logging';
-import randomId from './randomId';
+import React from 'react';
+import { action, asFlat, computed, observable } from 'mobx';
+import { logging, Utils } from '@jenkins-cd/blueocean-core-js';
 
-const LOGGER = logging.logger('react-flow.flowManager');
+
+const LOGGER = logging.logger('io.jenkins.blueocean.create-pipeline');
+
 
 /**
  * Base class for managing the flow of multiple steps.
@@ -13,7 +15,7 @@ export default class FlowManager {
     return 2000;
   }
 
-  @computed
+    @computed
   get activeIndex() {
     return this.steps.length > 0 ?
             this.steps.length - 1 : 0;
@@ -47,7 +49,8 @@ export default class FlowManager {
     /**
      * Callback invoked after initial step is set up
      */
-  onInitialized() {}
+  onInitialized() {
+  }
 
     // new APIS
 
@@ -69,7 +72,7 @@ export default class FlowManager {
      * @param afterStateId
      */
     @action
-  renderStep({ stateId, stepElement, afterStateId = null, props }) {
+  renderStep({ stateId, stepElement, afterStateId = null }) {
     if (!stateId || !stepElement) {
       this._throwError('stateId and stepElement are required');
     }
@@ -82,7 +85,7 @@ export default class FlowManager {
       this._throwError(`cannot find afterStateId=${afterStateId}`);
     }
 
-    const newStep = this._createStep(stateId, stepElement, props);
+    const newStep = this._createStep(stateId, stepElement);
 
     if (this.isStateAdded(stateId)) {
       this._replaceStep(newStep, stateId);
@@ -116,16 +119,15 @@ export default class FlowManager {
     this.changeState(lastStep.stateId);
   }
 
-  _createStep(stateId, stepElement, props) {
+  _createStep(stateId, stepElement) {
     const newStep = {
       stateId,
       stepElement,
-      props,
     };
 
         // each time a new step instance is created we want fresh React state
         // assign a unique ID to the React element's key to force a remount
-    newStep.stepElement.key = randomId();
+    newStep.stepElement = React.cloneElement(newStep.stepElement, { key: Utils.randomId() });
     return newStep;
   }
 
@@ -229,8 +231,8 @@ export default class FlowManager {
         // (some of them are React elements and making them observable leads to strange runtime errors)
     this.stateId = null;
     this.states = [];
-    this.steps = observable(observable.array([]));
-    this.placeholders = observable(observable.array([]));
+    this.steps = observable(asFlat([]));
+    this.placeholders = observable(asFlat([]));
 
     this.listener = null;
   }

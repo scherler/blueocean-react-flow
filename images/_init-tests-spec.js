@@ -1,4 +1,4 @@
-import {storiesOf, action, linkTo, specs, describe, it} from "../.storybook/mock";
+import { storiesOf, action, linkTo, specs, describe, it } from '../.storybook/mock';
 const jsdom = require('jsdom').jsdom;
 
 
@@ -13,28 +13,28 @@ const jsdom = require('jsdom').jsdom;
 export const prepareMount = () => {
     // code to boostrap mount with JSDOM
     // see: https://github.com/airbnb/enzyme/blob/master/docs/guides/jsdom.md
-    const exposedProperties = ['window', 'navigator', 'document'];
-    global.document = jsdom('<!doctype html><html><body></body></html>', {
-        headers: {
-            'User-Agent':
+  const exposedProperties = ['window', 'navigator', 'document'];
+  global.document = jsdom('<!doctype html><html><body></body></html>', {
+    headers: {
+      'User-Agent':
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_7)' +
-            ' AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.71 Safari/534.24'
-        }
-    });
-    global.window = document.defaultView;
-    global.navigator = global.window.navigator;
-    global.window.requestAnimationFrame = () => {};
-    global.window.location = {};
-    Object.keys(document.defaultView).forEach((property) => {
-        if (typeof global[property] === 'undefined') {
-            exposedProperties.push(property);
-            global[property] = document.defaultView[property];
-        }
-    });
+            ' AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.71 Safari/534.24',
+    },
+  });
+  global.window = document.defaultView;
+  global.navigator = global.window.navigator;
+  global.window.requestAnimationFrame = () => {};
+  global.window.location = {};
+  Object.keys(document.defaultView).forEach((property) => {
+    if (typeof global[property] === 'undefined') {
+      exposedProperties.push(property);
+      global[property] = document.defaultView[property];
+    }
+  });
 
-    global.navigator = {
-        userAgent: 'node.js',
-    };
+  global.navigator = {
+    userAgent: 'node.js',
+  };
 };
 
 
