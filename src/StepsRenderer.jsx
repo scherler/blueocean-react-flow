@@ -32,7 +32,7 @@ export class StepsRenderer extends Component {
     }
 }
 StepsRenderer.propTypes = {
-    flowManager: PropTypes.func,
+    flowManager: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
 };
 
 export default StepsRenderer;
