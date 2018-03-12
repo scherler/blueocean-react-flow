@@ -1,11 +1,14 @@
 import React from 'react';
 import { action, asFlat, computed, observable } from 'mobx';
-import { logging, Utils } from '@jenkins-cd/blueocean-core-js';
-
-
-const LOGGER = logging.logger('io.jenkins.blueocean.create-pipeline');
-
-
+/**
+ * Generate a "unique" ID with an optional prefix
+ * @param prefix
+ * @returns {string}
+ */
+function randomId(prefix = 'id') {
+    const integer = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
+    return `${prefix}-${integer}`;
+}
 /**
  * Base class for managing the flow of multiple steps.
  * Must provide an initial step, and has methods for pushing or replacing steps on stack.
@@ -127,7 +130,7 @@ export default class FlowManager {
 
         // each time a new step instance is created we want fresh React state
         // assign a unique ID to the React element's key to force a remount
-    newStep.stepElement = React.cloneElement(newStep.stepElement, { key: Utils.randomId() });
+    newStep.stepElement = React.cloneElement(newStep.stepElement, { key: randomId() });
     return newStep;
   }
 
@@ -157,13 +160,12 @@ export default class FlowManager {
     const currentStep = this.steps[this.steps.length - 1];
 
     if (this.stateId === stateId && currentStep.stateId === stateId) {
-      LOGGER.warn(`stateId already set to ${stateId}`);
+      console.warn(`stateId already set to ${stateId}`);
     }
 
     currentStep.stateId = stateId;
     this.stateId = stateId;
 
-    LOGGER.debug(`changed stateId to ${stateId}`);
   }
 
   _findStep(stateId) {
@@ -238,7 +240,7 @@ export default class FlowManager {
   }
 
   _throwError(errorString) {
-    LOGGER.error(errorString);
+    console.error(errorString);
     throw new Error(errorString);
   }
 
