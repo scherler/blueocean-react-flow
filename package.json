@@ -1,6 +1,6 @@
 {
   "name": "@jenkins-cd/react-flow",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "description": "Generic code to create a Flow with react",
   "main": "dist/index.js",
   "scripts": {
@@ -17,7 +17,7 @@
   "author": "Thorsten Scherler",
   "license": "MIT",
   "dependencies": {
-    "@jenkins-cd/design-language": "0.0.158",
+    "@jenkins-cd/design-language": "0.0.161-thor-1",
     "@jenkins-cd/logging": "0.0.6",
     "@kadira/storybook": "2.35.3",
     "babel-cli": "6.24.1",
