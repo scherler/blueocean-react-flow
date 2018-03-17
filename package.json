@@ -1,6 +1,6 @@
 {
   "name": "@jenkins-cd/react-flow",
-  "version": "0.0.27",
+  "version": "0.0.33",
   "description": "Generic code to create a Flow with react",
   "main": "dist/index.js",
   "scripts": {
@@ -33,6 +33,7 @@
   "devDependencies": {
     "babel-eslint": "7.2.3",
     "babel-plugin-transform-decorators-legacy": "1.3.4",
+    "babel-plugin-transform-object-assign": "^6.22.0",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-0": "6.24.1",
     "enzyme": "2.5.1",
